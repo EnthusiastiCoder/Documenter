@@ -1,54 +1,129 @@
-# React + TypeScript + Vite
+# 📘 Documenter
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Documenter** is a browser-based React + Vite tool that analyzes JavaScript and TypeScript files inside a `project/` folder, extracts all function definitions, and maps their usages across the entire codebase.
 
-Currently, two official plugins are available:
+It also supports `.docignore` to exclude folders from scanning and provides clickable links to open function definitions and usages directly in **VS Code**.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## ✨ Features
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- 🔍 **Function Discovery** — Detects all function declarations and expressions.
+- 📎 **Usage Tracking** — Finds where each function is used across all files.
+- ⚠️ **Duplicate Warning** — Warns if functions with the same name exist in different files.
+- 🧭 **VS Code Deep Linking** — Click to open functions and usage lines directly in VS Code.
+- 🚫 **Ignore Support** — Use `.docignore` to skip folders from analysis.
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+---
+
+## 🗂️ Folder Structure
+
+```
+/project/              # Folder containing your source files
+/.docignore            # Optional: folders to ignore (relative to /project)
+/src/
+  components/          # UI subcomponents
+  utils/               # Extraction and scanning logic
+  FileViewer.tsx       # Main component
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 🚀 Getting Started
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+### 1. Clone and install
+
+```bash
+git clone https://github.com/your-username/documenter.git
+cd documenter
+npm install
 ```
+
+### 2. Start development server
+
+```bash
+npm run dev
+```
+
+---
+
+## 🧪 Usage
+
+1. Place `.js` and `.ts` files in the `project/` directory (create it if not present).
+2. Optionally, update `.docignore` file in the root folder to ignore specific folders:
+
+```
+# .docignore
+node_modules
+dist
+legacy_code
+```
+
+3. Open your browser at `http://localhost:5173`.
+4. Search functions, browse definitions, see usages, and jump to code using **VS Code** links like:
+
+```
+vscode://file/C:/Users/you/Projects/Documenter/project/utils/helpers.ts:42
+```
+
+> Tip: If VS Code links don't open directly, ensure [vscode:// protocol](https://code.visualstudio.com/docs/editor/command-line#_opening-vs-code-with-urls) is registered with your system.
+
+---
+
+## 🧠 Tech Stack
+
+- ⚛️ React (with TypeScript)
+- ⚡ Vite (uses `import.meta.glob`)
+- 🧠 Static regex-based parsing
+
+---
+
+## 📌 Limitations
+
+- Only `.js` and `.ts` files are scanned.
+- `.docignore` supports only exact relative folder names (no glob patterns).
+- Uses simple regex-based function and usage scanning, not a full AST parser.
+
+---
+
+## 🧱 Example
+
+Given a folder like:
+
+```
+project/
+  utils/
+    helpers.ts   // contains function 'sum'
+  core/
+    main.ts      // uses 'sum'
+```
+
+You’ll see:
+
+- `sum` defined in `/utils/helpers.ts` (line X)
+- Used in `/core/main.ts` (line Y)
+
+And all links are clickable to open directly in your editor.
+
+---
+
+## 📄 License
+
+MIT © Arpan Mandal
+
+---
+
+## 💡 Future Enhancements
+
+- [ ] AST parsing for improved accuracy
+- [ ] File- and extension-level ignore support
+- [ ] Export as Markdown / JSON
+- [ ] Call hierarchy mapping
+- [ ] Support for class methods and arrow functions in complex contexts
+
+---
+
+## 🧠 Credits
+
+Built with love to help developers explore and understand large codebases faster, with minimal config and full VS Code integration.
+
