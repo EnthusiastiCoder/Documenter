@@ -10,13 +10,18 @@ interface FunctionItemProps {
   fileContents: Record<string, string>;
 }
 
-const FunctionItem: React.FC<FunctionItemProps> = ({ usage, duplicates, toVSCodeLink, fileContents }) => {
+const FunctionItem: React.FC<FunctionItemProps> = ({
+  usage,
+  duplicates,
+  toVSCodeLink,
+  fileContents
+}) => {
   const { name, filePath, line } = usage.function;
   const dupes = duplicates[name] || [];
   const fullFunctionCode = extractFunctionBlock(fileContents[filePath] || '', line);
 
   return (
-    <li className="mb-6">
+    <li className="mb-[1.5rem]">
       <strong>{name}</strong> —{' '}
       <a href={toVSCodeLink(filePath, line)} className="text-blue-600 underline">
         {filePath} (line {line})
@@ -32,33 +37,41 @@ const FunctionItem: React.FC<FunctionItemProps> = ({ usage, duplicates, toVSCode
         <p className="text-yellow-600 text-sm mt-2">
           ⚠️ Not to be confused with same-named function in:
           <ul className="list-disc list-inside">
-            {dupes.filter(p => p !== filePath).map((d, idx) => (
-              <li key={idx}>{d}</li>
-            ))}
+            {dupes
+              .filter((p) => p !== filePath)
+              .map((d, idx) => (
+                <li key={idx}>{d}</li>
+              ))}
           </ul>
         </p>
       )}
 
       {usage.references.length > 0 ? (
         <ul className="list-inside list-disc mt-3">
-          {usage.references.map((ref, j) => (
-            <li key={j}>
+          {usage.references.map((ref, refIndex) => (
+            <li key={refIndex} className="mb-2">
               Used in{' '}
-              <a href={toVSCodeLink(ref.filePath, ref.lines[0])} className="text-blue-600 underline">
+              <a
+                href={toVSCodeLink(ref.filePath, ref.lineInfos[0].line)}
+                className="text-blue-600 underline"
+              >
                 {ref.filePath}
-              </a>{' '}
-              on line(s):{' '}
-              {ref.lines.map((l, k) => (
-                <React.Fragment key={k}>
-                  <a
-                    href={toVSCodeLink(ref.filePath, l)}
-                    className="text-blue-500 underline mx-1"
-                  >
-                    {l}
-                  </a>
-                  {k < ref.lines.length - 1 && <span>,</span>}
-                </React.Fragment>
-              ))}
+              </a>
+              <ul className="ml-6 mt-1 list-disc text-sm">
+                {ref.lineInfos.map((lineInfo, lineIdx) => (
+                  <li key={lineIdx}>
+                    <a
+                      href={toVSCodeLink(ref.filePath, lineInfo.line)}
+                      className="text-blue-500 underline mr-2"
+                    >
+                      Line {lineInfo.line}
+                    </a>
+                    <code className="bg-gray-100 px-2 py-1 rounded">
+                      {lineInfo.content}
+                    </code>
+                  </li>
+                ))}
+              </ul>
             </li>
           ))}
         </ul>

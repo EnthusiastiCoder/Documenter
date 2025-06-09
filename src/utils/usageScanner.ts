@@ -1,10 +1,14 @@
 import type { FunctionDefinition } from './functionExtractor';
 
+export interface LineInfo {
+  line: number;
+  content: string;
+}
 export interface FunctionUsage {
   function: FunctionDefinition;
   references: {
     filePath: string;
-    lines: number[];
+    lineInfos: LineInfo[];
   }[];
 }
 
@@ -12,10 +16,7 @@ export interface FunctionUsage {
  * Detects usage of each function across all project files,
  * excluding the function's own definition line from being counted.
  */
-export function detectFunctionUsages(
-  functions: FunctionDefinition[],
-  fileContents: Record<string, string>
-): FunctionUsage[] {
+export function detectFunctionUsages(functions: FunctionDefinition[], fileContents: Record<string, string>): FunctionUsage[] {
   const usages: FunctionUsage[] = [];
 
   for (const fn of functions) {
@@ -26,24 +27,19 @@ export function detectFunctionUsages(
 
     for (const [filePath, content] of Object.entries(fileContents)) {
       const lines = content.split('\n');
-      const matchLines: number[] = [];
+      const matches: LineInfo[] = [];
 
       lines.forEach((line, idx) => {
-        const lineNumber = idx + 1;
         const regex = new RegExp(`\\b${fn.name}\\b`);
-
-        if (regex.test(line)) {
-          // Skip the definition line itself
-          if (!(filePath === fn.filePath && lineNumber === fn.line)) {
-            matchLines.push(lineNumber);
-          }
+        if (regex.test(line) && !(idx + 1 == fn.line && fn.filePath == filePath)) { 
+          matches.push({ line: idx + 1, content: line.trim() });
         }
       });
 
-      if (matchLines.length > 0) {
+      if (matches.length > 0) {
         usageEntry.references.push({
-          filePath,
-          lines: matchLines,
+          filePath:filePath,
+          lineInfos:matches
         });
       }
     }
@@ -53,3 +49,4 @@ export function detectFunctionUsages(
 
   return usages;
 }
+

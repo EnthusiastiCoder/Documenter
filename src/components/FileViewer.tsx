@@ -51,11 +51,12 @@ const FileViewer: React.FC = () => {
   };
 
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Function Usage Map</h2>
-
-      <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-
+    <div className="px-[5%]">
+      <div className="flex items-center justify-between mb-6 flex-wrap">
+        <h2 className="text-2xl font-bold mb-4">Documenter</h2>
+        <div className='w-[16px]'></div>
+        <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+      </div>
       {filtered.length === 0 ? (
         <p>No functions match your search.</p>
       ) : (
