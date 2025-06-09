@@ -20,11 +20,11 @@ It also supports `.docignore` to exclude folders from scanning and provides clic
 
 ```
 /project/              # Folder containing your source files
-/.docignore            # Optional: folders to ignore (relative to /project)
+/.docignore            # Folders/files to ignore (relative to /project)
 /src/
   components/          # UI subcomponents
   utils/               # Extraction and scanning logic
-  FileViewer.tsx       # Main component
+  App.tsx       # Main component
 ```
 
 ---
@@ -49,8 +49,8 @@ npm run dev
 
 ## 🧪 Usage
 
-1. Place `.js` and `.ts` files in the `project/` directory (create it if not present).
-2. Optionally, update `.docignore` file in the root folder to ignore specific folders:
+1. Place your project source code in the `project/` directory.
+2. Optionally, update `.docignore` file in the root folder to ignore specific folders per requirement:
 
 ```
 # .docignore
@@ -72,7 +72,7 @@ vscode://file/C:/Users/you/Projects/Documenter/project/utils/helpers.ts:42
 
 ## 🧠 Tech Stack
 
-- ⚛️ React (with TypeScript)
+- ⚛️ React (with TypeScript and TailwindCSS)
 - ⚡ Vite (uses `import.meta.glob`)
 - 🧠 Static regex-based parsing
 
