@@ -34,7 +34,7 @@ It also supports `.docignore` to exclude folders from scanning and provides clic
 ### 1. Clone and install
 
 ```bash
-git clone https://github.com/your-username/documenter.git
+git clone https://github.com/EnthusiastiCoder/documenter.git
 cd documenter
 npm install
 ```
